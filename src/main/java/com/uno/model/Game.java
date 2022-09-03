@@ -1,6 +1,7 @@
 package com.uno.model;
 
-import com.uno.dtos.game.Card;
+import com.uno.dtos.Card;
+import com.uno.dtos.player.Player;
 import com.uno.enums.FlowType;
 import com.uno.enums.GameStatus;
 import com.uno.enums.GameType;
@@ -27,6 +28,8 @@ public class Game {
     private List<Player> players;
 
     private List<Card> cardDeck;
+
+    private List<Card> discardDeck;
 
     private FlowType flowType;
 
