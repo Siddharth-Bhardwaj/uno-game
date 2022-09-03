@@ -1,6 +1,6 @@
-package com.uno.model;
+package com.uno.dtos.player;
 
-import com.uno.dtos.game.Card;
+import com.uno.dtos.Card;
 import lombok.Builder;
 import lombok.Data;
 
