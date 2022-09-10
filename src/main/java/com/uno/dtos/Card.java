@@ -29,10 +29,11 @@ import static com.uno.enums.CardValue.wildCardValues;
 @AllArgsConstructor
 public class Card {
 
-    private CardColor cardColor;
+    private CardColor color;
     private CardValue value;
     private CardAction action;
     private String slug;
+    private boolean isSpecial;
 
     public static List<Card> initializeDeck() {
         List<Card> cards = Stream.of(initializeNumericalCards(), initializeActionCards(),
@@ -58,11 +59,13 @@ public class Card {
 
     private static List<Card> initializeNumericalCards() {
         return Arrays.stream(CardColor.values())
+                .filter(cardColor -> !CardColor.BLACK.equals(cardColor))
                 .map(cardColor -> new ArrayList<>(numericalCardValues).stream()
-                        .map(cardValue -> Card.builder().cardColor(cardColor)
+                        .map(cardValue -> Card.builder().color(cardColor)
                                 .value(cardValue)
                                 .action(fromString(cardValue.action))
                                 .slug(getCardSlug(cardColor, cardValue))
+                                .isSpecial(false)
                                 .build())
                         .collect(Collectors.toList())
                         .stream()
@@ -82,13 +85,15 @@ public class Card {
 
     private static List<Card> initializeActionCards() {
         return Arrays.stream(CardColor.values())
+                .filter(cardColor -> !CardColor.BLACK.equals(cardColor))
                 .map(cardColor ->
                         new ArrayList<>(actionCardValues).stream()
                                 .map(cardValue -> Card.builder()
-                                        .cardColor(cardColor)
+                                        .color(cardColor)
                                         .value(cardValue)
                                         .action(fromString(cardValue.action))
-                                        .slug("")
+                                        .slug(getCardSlug(cardColor, cardValue))
+                                        .isSpecial(true)
                                         .build())
                                 .collect(Collectors.toList())
                                 .stream()
@@ -103,9 +108,11 @@ public class Card {
         return wildCardValues.stream()
                 .map(cardValue ->
                         Card.builder()
+                                .color(CardColor.BLACK)
                                 .value(cardValue)
                                 .action(fromString(cardValue.action))
-                                .slug("")
+                                .slug(getCardSlug(null, cardValue))
+                                .isSpecial(true)
                                 .build())
                 .collect(Collectors.toList())
                 .stream()
