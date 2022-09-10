@@ -6,20 +6,24 @@ import com.uno.enums.FlowType;
 import com.uno.enums.GameStatus;
 import com.uno.enums.GameType;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
-@Builder
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Document("game")
-public class Game {
+public class Game extends AuditModel {
+
     @Id
     private String id;
 
@@ -27,9 +31,9 @@ public class Game {
 
     private List<Player> players;
 
-    private List<Card> cardDeck;
+    private List<Card> cardDeck = new ArrayList<>();
 
-    private List<Card> discardDeck;
+    private List<Card> discardDeck = new ArrayList<>();
 
     private FlowType flowType;
 
@@ -42,4 +46,6 @@ public class Game {
     private Integer turnTimeout;
 
     private String winnerPlayerId;
+
 }
+
