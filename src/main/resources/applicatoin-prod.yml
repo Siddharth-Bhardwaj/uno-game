@@ -2,7 +2,6 @@ spring:
   data:
     mongodb:
       uri: "mongodb+srv://uno-game:KkCTJZFC16FOlSuk@cluster0.72cfk.mongodb.net/uno?retryWrites=true&w=majority"
-      port: 27017
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
