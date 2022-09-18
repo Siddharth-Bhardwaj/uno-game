@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: "mongodb+srv://uno-game:KkCTJZFC16FOlSuk@cluster0.72cfk.mongodb.net/uno?retryWrites=true&w=majority"
+      uri: "mongodb://localhost:27017/uno"
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
