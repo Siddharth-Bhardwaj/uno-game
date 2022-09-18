@@ -9,6 +9,7 @@ import com.uno.repository.GameRepository;
 import com.uno.service.GameService;
 import com.uno.service.PlayerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.List;
 import static com.uno.dtos.Card.initializeDeck;
 
 @Service
-@RequiredArgsConstructor
+@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class GameServiceImpl implements GameService {
 
     private final GameRepository gameRepository;
