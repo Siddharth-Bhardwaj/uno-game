@@ -93,7 +93,7 @@ public class Card {
                                         .value(cardValue)
                                         .action(fromString(cardValue.action))
                                         .slug(getCardSlug(cardColor, cardValue))
-                                        .isSpecial(true)
+                                        .isSpecial(false)
                                         .build())
                                 .collect(Collectors.toList())
                                 .stream()
