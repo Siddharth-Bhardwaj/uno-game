@@ -5,4 +5,6 @@ import com.uno.model.Game;
 
 public interface GameService {
     Game create(GameRequest gameRequest);
+
+    Game getGame(String gameId);
 }

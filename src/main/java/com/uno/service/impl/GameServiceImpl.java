@@ -30,6 +30,11 @@ public class GameServiceImpl implements GameService {
         return gameRepository.save(game);
     }
 
+    @Override
+    public Game getGame(String gameId) {
+        return gameRepository.findById(gameId).orElse(new Game());
+    }
+
     // todo: add test that initialized game has null current card and discard deck and vice versa
     private Game createGame(GameRequest gameRequest) {
         Player player = playerService.create(gameRequest.getPlayerName());
