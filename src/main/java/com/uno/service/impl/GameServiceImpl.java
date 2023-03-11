@@ -41,6 +41,7 @@ public class GameServiceImpl implements GameService {
       throw new IllegalArgumentException(
           "Either the game does not exist or the player is not authorized to start this game");
     }
+    // todo: add check that there should be more than 1 player in the game
     Game game = optionalGame.get();
     game.setGameStatus(GameStatus.IN_PROGRESS);
     distributeCards(game);

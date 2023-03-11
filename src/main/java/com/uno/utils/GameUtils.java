@@ -8,6 +8,7 @@ import com.uno.dtos.player.Player;
 import com.uno.enums.FlowType;
 import com.uno.enums.GameStatus;
 import com.uno.model.Game;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Stack;
@@ -19,6 +20,9 @@ public class GameUtils {
       game.setCardDeck(initializeDeck());
     }
     Collections.shuffle(game.getCardDeck());
+    game.getPlayers().stream()
+        .filter(player -> CollectionUtils.isEmpty(player.getCards()))
+        .forEach(player -> player.setCards(new ArrayList<>()));
     for (int i = 0; i < 7; i++) {
       game.getPlayers().forEach(player -> player.getCards().add(game.getCardDeck().pop()));
     }
