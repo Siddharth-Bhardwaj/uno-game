@@ -9,7 +9,6 @@ import com.uno.model.Game;
 import com.uno.repository.GameRepository;
 import com.uno.service.GameService;
 import com.uno.service.PlayerService;
-import com.uno.utils.GameUtils;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -20,19 +19,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class GameServiceImpl implements GameService {
 
-    private final GameRepository gameRepository;
-    private final PlayerService playerService;
+  private final GameRepository gameRepository;
+  private final PlayerService playerService;
 
-    @Override
-    public Game createGame(GameRequest gameRequest) {
-        Game game = create(gameRequest);
-        return gameRepository.save(game);
-    }
+  @Override
+  public Game createGame(GameRequest gameRequest) {
+    Game game = create(gameRequest);
+    return gameRepository.save(game);
+  }
 
-    @Override
-    public Game getGame(String gameId) {
-        return gameRepository.findById(gameId).orElse(new Game());
-    }
+  @Override
+  public Game getGame(String gameId) {
+    return gameRepository.findById(gameId).orElse(new Game());
+  }
 
   @Override
   public Game startGame(String gameId, String playerId) {

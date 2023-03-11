@@ -11,9 +11,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GameRequest {
-    private GameType gameType;
+  private GameType gameType;
 
-    private String playerName;
+  private String playerName;
 
-    private Integer turnTimeout;
+  private Integer turnTimeout;
 }

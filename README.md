@@ -2,6 +2,10 @@
 
 Maven Project built on OpenJDK 11 (I am using Oracle OpenJDK 11.0.1).
 
+Install and Configure [google-java-format](https://plugins.jetbrains.com/plugin/8527-google-java-format) to keep the
+formatting consistent (requires
+additional [config changes](https://github.com/google/google-java-format/blob/master/README.md#intellij-jre-config)).
+
 ## DB setup
 
 Start mongodb on the default port (localhost:27017).

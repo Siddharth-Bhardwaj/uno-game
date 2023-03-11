@@ -26,9 +26,9 @@ import org.springframework.util.CollectionUtils;
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class PlayerServiceImpl implements PlayerService {
 
-    private final GameRepository gameRepository;
+  private final GameRepository gameRepository;
 
-    private static final int MAX_PLAYER_COUNT = 10;
+  private static final int MAX_PLAYER_COUNT = 10;
 
   @Override
   public Game joinGame(String playerName, String gameId) {
@@ -43,75 +43,76 @@ public class PlayerServiceImpl implements PlayerService {
     return gameRepository.save(game);
   }
 
-    @Override
-    public Game leaveGame(String playerId, String gameId) {
-        Optional<Game> optionalGame = gameRepository.findById(gameId);
-        if (optionalGame.isEmpty()) {
-            throw new IllegalArgumentException(GAME_NOT_FOUND.value);
-        }
-        Game game = optionalGame.get();
-        if (CollectionUtils.isEmpty(game.getPlayers())
-                || game.getPlayers().stream().noneMatch(player -> playerId.equals(player.getId()))) {
-            throw new IllegalArgumentException(PLAYER_NOT_FOUND.value);
-        }
-        List<Player> updatedPlayerList = game.getPlayers().stream()
-                .peek(player -> {
-                    if (playerId.equals(player.getId())) {
-                        player.setActive(false);
-                    }
+  @Override
+  public Game leaveGame(String playerId, String gameId) {
+    Optional<Game> optionalGame = gameRepository.findById(gameId);
+    if (optionalGame.isEmpty()) {
+      throw new IllegalArgumentException(GAME_NOT_FOUND.value);
+    }
+    Game game = optionalGame.get();
+    if (CollectionUtils.isEmpty(game.getPlayers())
+        || game.getPlayers().stream().noneMatch(player -> playerId.equals(player.getId()))) {
+      throw new IllegalArgumentException(PLAYER_NOT_FOUND.value);
+    }
+    List<Player> updatedPlayerList =
+        game.getPlayers().stream()
+            .peek(
+                player -> {
+                  if (playerId.equals(player.getId())) {
+                    player.setActive(false);
+                  }
                 })
-                .collect(Collectors.toList());
-        game.setPlayers(updatedPlayerList);
-        postProcessingAfterLeaving(game);
-        return gameRepository.save(game);
-    }
+            .collect(Collectors.toList());
+    game.setPlayers(updatedPlayerList);
+    postProcessingAfterLeaving(game);
+    return gameRepository.save(game);
+  }
 
-    private void postProcessingAfterLeaving(Game game) {
-        game.getPlayers()
-                .stream()
-                .filter(player -> !player.isActive())
-                .forEach(player -> {
-                    if (!CollectionUtils.isEmpty(player.getCards())) {
-                        game.getDiscardDeck().addAll(player.getCards());
-                    }
-                    player.setCards(new ArrayList<>());
-                });
-        if (game.getPlayers().stream().noneMatch(Player::isActive)) {
-            game.setGameStatus(GameStatus.FINISHED);
-        }
+  private void postProcessingAfterLeaving(Game game) {
+    game.getPlayers().stream()
+        .filter(player -> !player.isActive())
+        .forEach(
+            player -> {
+              if (!CollectionUtils.isEmpty(player.getCards())) {
+                game.getDiscardDeck().addAll(player.getCards());
+              }
+              player.setCards(new ArrayList<>());
+            });
+    if (game.getPlayers().stream().noneMatch(Player::isActive)) {
+      game.setGameStatus(GameStatus.FINISHED);
     }
+  }
 
-    private void validateGameBeforeJoining(String playerName, Game game) {
-        validateIfPlayerAlreadyExists(playerName, game);
-        validatePlayerCount(game);
-        validateGameStatus(game);
+  private void validateGameBeforeJoining(String playerName, Game game) {
+    validateIfPlayerAlreadyExists(playerName, game);
+    validatePlayerCount(game);
+    validateGameStatus(game);
+  }
+
+  private void validateIfPlayerAlreadyExists(String playerName, Game game) {
+    if (CollectionUtils.isEmpty(game.getPlayers())) {
+      return;
     }
-
-    private void validateIfPlayerAlreadyExists(String playerName, Game game) {
-        if (CollectionUtils.isEmpty(game.getPlayers())) {
-            return;
-        }
-        if (game.getPlayers().stream()
-                .anyMatch(player -> playerName.equalsIgnoreCase(player.getName()))) {
-            throw new IllegalArgumentException(PLAYER_ALREADY_EXISTS.value);
-        }
-
+    if (game.getPlayers().stream()
+        .anyMatch(player -> playerName.equalsIgnoreCase(player.getName()))) {
+      throw new IllegalArgumentException(PLAYER_ALREADY_EXISTS.value);
     }
+  }
 
-    // todo: create custom exceptions
-    private void validatePlayerCount(Game game) {
-        if (CollectionUtils.isEmpty(game.getPlayers())
-                || game.getPlayers().size() + 1 == MAX_PLAYER_COUNT) {
-            throw new IllegalStateException(MAX_PLAYERS_REACHED.value);
-        }
+  // todo: create custom exceptions
+  private void validatePlayerCount(Game game) {
+    if (CollectionUtils.isEmpty(game.getPlayers())
+        || game.getPlayers().size() + 1 == MAX_PLAYER_COUNT) {
+      throw new IllegalStateException(MAX_PLAYERS_REACHED.value);
     }
+  }
 
-    private void validateGameStatus(Game game) {
-        if (GameStatus.IN_PROGRESS.equals(game.getGameStatus())) {
-            throw new IllegalStateException(GAME_IN_PROGRESS.value);
-        }
-        if (GameStatus.FINISHED.equals(game.getGameStatus())) {
-            throw new IllegalStateException(GAME_FINISHED.value);
-        }
+  private void validateGameStatus(Game game) {
+    if (GameStatus.IN_PROGRESS.equals(game.getGameStatus())) {
+      throw new IllegalStateException(GAME_IN_PROGRESS.value);
     }
+    if (GameStatus.FINISHED.equals(game.getGameStatus())) {
+      throw new IllegalStateException(GAME_FINISHED.value);
+    }
+  }
 }
