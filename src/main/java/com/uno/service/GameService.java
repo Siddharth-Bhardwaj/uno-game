@@ -4,7 +4,9 @@ import com.uno.dtos.game.GameRequest;
 import com.uno.model.Game;
 
 public interface GameService {
-    Game create(GameRequest gameRequest);
+    Game createGame(GameRequest gameRequest);
 
     Game getGame(String gameId);
+
+    Game startGame(String gameId, String playerId);
 }

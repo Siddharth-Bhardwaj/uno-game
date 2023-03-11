@@ -8,12 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -35,13 +30,15 @@ public class Card {
     private String slug;
     private boolean isSpecial;
 
-    public static List<Card> initializeDeck() {
+    public static Stack<Card> initializeDeck() {
         List<Card> cards = Stream.of(initializeNumericalCards(), initializeActionCards(),
                         initializeWildCards())
                 .flatMap(Collection::stream)
                 .collect(Collectors.toList());
         Collections.shuffle(cards);
-        return cards;
+        Stack<Card> cardStack = new Stack<>();
+        cardStack.addAll(cards);
+        return cardStack;
     }
 
     private static String getCardSlug(CardColor cardColor, CardValue value) {

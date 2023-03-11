@@ -1,27 +1,26 @@
 package com.uno.service.impl;
 
-import com.uno.dtos.player.Player;
-import com.uno.enums.GameStatus;
-import com.uno.model.Game;
-import com.uno.repository.GameRepository;
-import com.uno.service.PlayerService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
-import java.util.stream.Collectors;
-
 import static com.uno.enums.ErrorMessage.GAME_FINISHED;
 import static com.uno.enums.ErrorMessage.GAME_IN_PROGRESS;
 import static com.uno.enums.ErrorMessage.GAME_NOT_FOUND;
 import static com.uno.enums.ErrorMessage.MAX_PLAYERS_REACHED;
 import static com.uno.enums.ErrorMessage.PLAYER_ALREADY_EXISTS;
 import static com.uno.enums.ErrorMessage.PLAYER_NOT_FOUND;
+import static com.uno.utils.CommonUtils.createPlayer;
+
+import com.uno.dtos.player.Player;
+import com.uno.enums.GameStatus;
+import com.uno.model.Game;
+import com.uno.repository.GameRepository;
+import com.uno.service.PlayerService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
@@ -31,27 +30,18 @@ public class PlayerServiceImpl implements PlayerService {
 
     private static final int MAX_PLAYER_COUNT = 10;
 
-    @Override
-    public Player create(String name) {
-        return Player.builder()
-                .id(UUID.randomUUID().toString())
-                .name(name)
-                .isActive(true)
-                .build();
+  @Override
+  public Game joinGame(String playerName, String gameId) {
+    // todo: create unique game code (4-5 digits) for joining
+    Optional<Game> optionalGame = gameRepository.findById(gameId);
+    if (optionalGame.isEmpty()) {
+      throw new IllegalArgumentException(GAME_NOT_FOUND.value);
     }
-
-    @Override
-    public Game joinGame(String playerName, String gameId) {
-        // todo: create unique game code (4-5 digits) for joining
-        Optional<Game> optionalGame = gameRepository.findById(gameId);
-        if (optionalGame.isEmpty()) {
-            throw new IllegalArgumentException(GAME_NOT_FOUND.value);
-        }
-        Game game = optionalGame.get();
-        validateGameBeforeJoining(playerName, game);
-        game.getPlayers().add(create(playerName));
-        return gameRepository.save(game);
-    }
+    Game game = optionalGame.get();
+    validateGameBeforeJoining(playerName, game);
+    game.getPlayers().add(createPlayer(playerName));
+    return gameRepository.save(game);
+  }
 
     @Override
     public Game leaveGame(String playerId, String gameId) {
