@@ -1,6 +1,7 @@
 package com.uno.controller;
 
 import com.uno.constants.HeaderConstants;
+import com.uno.dtos.client.CreateGameResponse;
 import com.uno.dtos.game.GameRequest;
 import com.uno.model.Game;
 import com.uno.service.GameService;
@@ -17,9 +18,14 @@ public class GameController {
   private final GameService gameService;
 
   @PostMapping(value = "/create")
-  ResponseEntity<String> createGame(@RequestBody GameRequest gameRequest) {
+  ResponseEntity<CreateGameResponse> createGame(@RequestBody GameRequest gameRequest) {
+    Game game = gameService.createGame(gameRequest);
     return ResponseEntity.status(HttpStatus.CREATED)
-        .body(gameService.createGame(gameRequest).getId());
+        .body(
+            CreateGameResponse.builder()
+                .gameId(game.getId())
+                .ownerPlayerId(game.getOwnerPlayerId())
+                .build());
   }
 
   @GetMapping(value = "/{gameId}")

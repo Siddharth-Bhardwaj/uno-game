@@ -8,7 +8,6 @@ import com.uno.enums.GameStatus;
 import com.uno.model.Game;
 import com.uno.repository.GameRepository;
 import com.uno.service.GameService;
-import com.uno.service.PlayerService;
 import java.util.Optional;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,6 @@ import org.springframework.stereotype.Service;
 public class GameServiceImpl implements GameService {
 
   private final GameRepository gameRepository;
-  private final PlayerService playerService;
 
   @Override
   public Game createGame(GameRequest gameRequest) {
